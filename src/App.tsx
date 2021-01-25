@@ -1,25 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import {Form} from './components/form/form';
+import {TodoList} from './components/todoList/todoList';
+import {Footer} from './components/footer/footer';
+import {TodosContext} from './context/TodosProvider';
+import {ITodo} from './types'
 
 function App() {
+  
+  const [todos, setTodos] = useState<Array<ITodo>>([])
+
+  function todoHandler(description: string) {
+    setTodos([...todos, {description, id: Date.now(), completed: false}])
+  }
+  console.log(todos);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <TodosContext.Provider value={{todos}}>
+      <div className="App">
+        <h1>todos</h1>
+        <Form todoHandler={todoHandler}/>
+        <TodoList/>
+        <Footer/>
+      </div>
+    </TodosContext.Provider>
   );
 }
 
